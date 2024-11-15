@@ -10,6 +10,8 @@ import { Observable } from 'rxjs';
 import { ImageGridComponent } from './components/image-grid/image-grid.component';
 import { PictureService } from './services/app.pictures.service';
 import { Decrement, Increment } from './store/counter.state';
+import { SimulateSearching } from './store/picutre.state';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -62,9 +64,10 @@ export class AppComponent {
     this.store.dispatch(new Decrement());
   }
 
-  async getImages() {
+  async search($event: Event) {
+    $event.preventDefault();
     if(this.searchControl.value !== null) {
-      const pictureObject = await this.pictureService.getPhotoById(this.searchControl.value);
+      this.store.dispatch(new SimulateSearching())
     }
   }
 

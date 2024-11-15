@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject } from '@angular/core';
 import {
   MatDialog,
   MatDialogActions,
@@ -7,9 +7,12 @@ import {
 } from '@angular/material/dialog';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { Store } from '@ngxs/store';
-import { LoadMorePictures } from '../../store/picutre.state';
+import { LoadMorePictures, PicturesStateModel } from '../../store/picutre.state';
 import { DialogComponent } from '../dialog/dialog.component';
 
+export interface AppState {
+  pictures: PicturesStateModel;
+}
 interface Picture {
   author: string;
   download_url: string;
@@ -32,18 +35,36 @@ interface Picture {
   ],
   templateUrl: './image-grid.component.html',
   styleUrl: './image-grid.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageGridComponent {
   readonly dialog = inject(MatDialog);
   isLoading$
   page$
   pictures$
+  source$
+  initialized: boolean = false;
 
   constructor(private store: Store) {
-    this.isLoading$ = this.store.select(state => state.pictures.isLoading)
-    this.page$ = this.store.select(state => state.pictures.page)
-    this.pictures$ = this.store.select(state => state.pictures.pictures)
-    this.updatePictures();
+    this.isLoading$ = this.store.select((state: AppState) => state.pictures.isLoading)
+    this.page$ = this.store.select((state: AppState) => state.pictures.page)
+    this.pictures$ = this.store.select((state: AppState) => state.pictures.pictures)
+    this.source$ = this.store.select((state: AppState) => state.pictures.source);
+
+    // this.source$.subscribe(source => {
+    //   if (source === 'load') {
+    //     this.updatePictures();
+    //   }
+    // });
+  }
+
+  ngOnInit() {
+    this.store.select(state => state.pictures.source).subscribe(source => {
+      console.log('store variable - source', source)
+      if (source !== 'search') {
+        this.updatePictures();
+      }
+    });
   }
 
   updatePictures() {

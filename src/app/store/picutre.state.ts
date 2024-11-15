@@ -13,6 +13,7 @@ export interface Picture {
 
 export interface PicturesStateModel {
 	pictures: Picture[],
+	source: 'load' | 'search',
 	page: number,
 	isLoading: boolean,
 }
@@ -20,11 +21,15 @@ export interface PicturesStateModel {
 export class LoadMorePictures {
 	static readonly type = '[Pictures] Load More'
 }
+export class SimulateSearching {
+	static readonly type = '[Pictures] Simulate Searching'
+}
 
 @State<PicturesStateModel>({
 	name: 'pictures',
 	defaults: {
 		pictures: [],
+		source: 'load',
 		isLoading: false,
 		page: 1,
 	}
@@ -48,8 +53,23 @@ export class PicturesState {
 		ctx.patchState({
 			pictures: [...state.pictures, ...pictures],
 			isLoading: false,
+			source: 'load',
 			page: state.page + 1
 		})
 		this.pictureService.nextPage()
+	}
+
+  @Action(SimulateSearching)
+	async simulateSearching(ctx: StateContext<PicturesStateModel>) {
+		const state = ctx.getState();
+		ctx.patchState({isLoading: true})
+		const pictures = await this.pictureService.simulateSearching();
+		ctx.patchState({
+			pictures: pictures,
+			isLoading: false,
+			source: 'search',
+			page: state.page + 1
+		})
+		this.pictureService.nextPage();
 	}
 }

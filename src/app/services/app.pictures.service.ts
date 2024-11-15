@@ -26,8 +26,8 @@ export class PictureService {
     return response.json();
   }
 
-  async getPhotoById(id: string): Promise<Picture> {
-    const response = await fetch(`${this.url}/${id}`);
+  async simulateSearching(): Promise<Picture[]> {
+    const response = await fetch(`${this.url}?page=${(Math.random() * 10).toFixed(0)}&limit=${this.limit}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
