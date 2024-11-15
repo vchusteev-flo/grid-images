@@ -5,11 +5,15 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatError, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterOutlet } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { ImageGridComponent } from './components/image-grid/image-grid.component';
+import { PictureService } from './services/app.pictures.service';
+import { Decrement, Increment } from './store/counter.state';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ImageGridComponent, MatFormField, MatError, ReactiveFormsModule,  MatInputModule],
+  imports: [RouterOutlet, CommonModule, ImageGridComponent, MatFormField, MatError, ReactiveFormsModule, MatInputModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   animations: [
@@ -40,8 +44,30 @@ import { ImageGridComponent } from './components/image-grid/image-grid.component
   ],
 })
 export class AppComponent {
+  count$: Observable<number>;
   searchControl = new FormControl('', [Validators.required]);
   isScrolled = false;
+
+  constructor(private store: Store, private pictureService: PictureService ) {
+    this.count$ = this.store.select(state => state.counter.count)
+  }
+
+  increment(event: Event) {
+    event.preventDefault();
+    this.store.dispatch(new Increment());
+  }
+
+  decrement(event: Event) {
+    event.preventDefault();
+    this.store.dispatch(new Decrement());
+  }
+
+  async getImages() {
+    if(this.searchControl.value !== null) {
+      const pictureObject = await this.pictureService.getPhotoById(this.searchControl.value);
+    }
+  }
+
   @HostListener('window:scroll', ['$event'])
   onScroll(): void {
     this.isScrolled = true;

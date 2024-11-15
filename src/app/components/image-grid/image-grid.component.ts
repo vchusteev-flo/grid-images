@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject } from '@angular/core';
 import {
   MatDialog,
@@ -5,7 +6,8 @@ import {
   MatDialogModule,
 } from '@angular/material/dialog';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { PictureService } from '../../services/app.pictures.service';
+import { Store } from '@ngxs/store';
+import { LoadMorePictures } from '../../store/picutre.state';
 import { DialogComponent } from '../dialog/dialog.component';
 
 interface Picture {
@@ -21,6 +23,7 @@ interface Picture {
   selector: 'app-image-grid',
   standalone: true,
   imports: [
+    CommonModule,
     MatGridList,
     MatGridTile,
     MatDialogModule,
@@ -32,12 +35,19 @@ interface Picture {
 })
 export class ImageGridComponent {
   readonly dialog = inject(MatDialog);
-  pictures: any[] = [];
-  isLoading = false;
-  page = 1;
+  isLoading$
+  page$
+  pictures$
 
-  constructor(private pictureService: PictureService) {
-    this.loadPictures();
+  constructor(private store: Store) {
+    this.isLoading$ = this.store.select(state => state.pictures.isLoading)
+    this.page$ = this.store.select(state => state.pictures.page)
+    this.pictures$ = this.store.select(state => state.pictures.pictures)
+    this.updatePictures();
+  }
+
+  updatePictures() {
+    this.store.dispatch(new LoadMorePictures())
   }
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string, picture: Picture): void {
@@ -59,13 +69,12 @@ export class ImageGridComponent {
         }
       });
     };
-}
-
+  }
 
   @HostListener('window:scroll', ['$event'])
   onScroll(): void {
     if (this.isNearBottom()) {
-      this.loadMorePictures();
+      this.updatePictures()
     }
   }
 
@@ -74,19 +83,5 @@ export class ImageGridComponent {
       window.innerHeight + window.scrollY >=
       document.documentElement.scrollHeight - 100
     );
-  }
-
-  async loadPictures() {
-    const newPictures = await this.pictureService.getPhotos();
-    this.pictures = [...this.pictures, ...newPictures];
-  }
-
-  async loadMorePictures() {
-    if (this.isLoading) return;
-
-    this.isLoading = true;
-    this.page = this.pictureService.nextPage();
-    await this.loadPictures();
-    this.isLoading = false;
   }
 }

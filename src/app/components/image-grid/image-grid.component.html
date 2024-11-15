@@ -1,5 +1,5 @@
 <mat-grid-list cols="2" rowHeight="500px">
-  @for (picture of pictures; track picture.id) {
+  @for (picture of pictures$ | async; track picture.url) {
     <mat-grid-tile class='grid-item fade-in'>
       <img mat-raised-button (click)="openDialog('0ms', '0ms', picture)" [src]="picture.download_url" [alt]="picture.author"
       loading="lazy"/>
