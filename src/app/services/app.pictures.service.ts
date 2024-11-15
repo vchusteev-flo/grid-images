@@ -13,7 +13,7 @@ interface Picture {
 	providedIn: 'root'
 })
 export class PictureService {
-  private readonly url = 'https://picsum.photos/v2/list/';
+  private readonly url = 'https://picsum.photos/v2/list';
 
 	private page = 1;
 	private limit = 10;

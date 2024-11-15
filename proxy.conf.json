@@ -1,0 +1,11 @@
+{
+  "/api": {
+    "target": "https://picsum.photos/v2/list",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
