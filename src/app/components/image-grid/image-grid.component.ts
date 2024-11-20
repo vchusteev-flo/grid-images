@@ -13,14 +13,26 @@ import { DialogComponent } from '../dialog/dialog.component';
 export interface AppState {
   pictures: PicturesStateModel;
 }
-interface Picture {
-  author: string;
-  download_url: string;
-  id: string;
-  url: string;
-  width: string;
-  height: string;
-}
+
+type Photo = {
+  id: number;
+  width: number;
+  height: number;
+  urls: { large: string; regular: string; raw: string; small: string };
+  color: string | null;
+  user: {
+    username: string;
+    name: string;
+  };
+};
+// interface Picture {
+//   author: string;
+//   download_url: string;
+//   id: string;
+//   url: string;
+//   width: string;
+//   height: string;
+// }
 
 @Component({
   selector: 'app-image-grid',
@@ -71,9 +83,9 @@ export class ImageGridComponent {
     this.store.dispatch(new LoadMorePictures())
   }
 
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string, picture: Picture): void {
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string, picture: Photo): void {
     const img = new Image();
-    img.src = picture.download_url;
+    img.src = picture.urls.regular;
     
     img.onload = () => {
       const dialogWidth = Math.min(img.width, window.innerWidth * 0.45); 
@@ -85,8 +97,8 @@ export class ImageGridComponent {
         enterAnimationDuration,
         exitAnimationDuration,
         data: { 
-          imageUrl: picture.download_url,
-          author: picture.author
+          imageUrl: picture.urls.regular,
+          author: picture.user.name,
         }
       });
     };

@@ -1,7 +1,7 @@
 <mat-grid-list cols="2" rowHeight="500px">
   @for (picture of pictures$ | async; track idx; let idx = $index) {
     <mat-grid-tile class='grid-item fade-in'>
-      <img mat-raised-button (click)="openDialog('0ms', '0ms', picture)" [src]="picture.download_url" [alt]="picture.author"
+      <img mat-raised-button (click)="openDialog('0ms', '0ms', picture)" [src]="picture.urls.regular" [alt]="picture.user.name"
       loading="lazy"/>
     </mat-grid-tile>
   }

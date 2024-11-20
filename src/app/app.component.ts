@@ -67,7 +67,7 @@ export class AppComponent {
   async search($event: Event) {
     $event.preventDefault();
     if(this.searchControl.value !== null) {
-      this.store.dispatch(new SimulateSearching())
+      this.store.dispatch(new SimulateSearching(this.searchControl.value))
     }
   }
 
