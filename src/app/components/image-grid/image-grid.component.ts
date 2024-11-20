@@ -55,6 +55,7 @@ export class ImageGridComponent {
   page$
   pictures$
   source$
+  query$
   initialized: boolean = false;
 
   constructor(private store: Store) {
@@ -62,6 +63,7 @@ export class ImageGridComponent {
     this.page$ = this.store.select((state: AppState) => state.pictures.page)
     this.pictures$ = this.store.select((state: AppState) => state.pictures.pictures)
     this.source$ = this.store.select((state: AppState) => state.pictures.source);
+    this.query$ = this.store.select((state: AppState) => state.pictures.query);
 
     // this.source$.subscribe(source => {
     //   if (source === 'load') {
@@ -72,15 +74,14 @@ export class ImageGridComponent {
 
   ngOnInit() {
     this.store.select(state => state.pictures.source).subscribe(source => {
-      console.log('store variable - source', source)
-      if (source !== 'search') {
+      if (source === 'load') {
         this.updatePictures();
       }
     });
   }
 
   updatePictures() {
-    this.store.dispatch(new LoadMorePictures())
+     return this.store.dispatch(new LoadMorePictures());
   }
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string, picture: Photo): void {

@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-
-// interface Picture {
-//     id: string
-//     author: string
-//     width: string
-//     height: string
-//     url: string
-//     download_url: string
-// }
+import { Store } from '@ngxs/store';
 
 type Photo = {
   id: number;
@@ -26,12 +18,18 @@ type Photo = {
 })
 export class PictureService {
   private readonly url = 'https://j8dwmmnd71.execute-api.us-east-1.amazonaws.com/';
+  private readonly limit = 10;
 
-	private page = 1;
-	private limit = 10;
+  constructor(private store: Store) {}
 
-	async getPhotos(): Promise<Photo[]> {
-    const response = await fetch(`${this.url}?page=${this.page}&limit=${this.limit}`);
+	async getPhotos(query: string): Promise<Photo[]> {
+    const state = this.store.selectSnapshot(state => state.pictures);
+
+    const url = query 
+    ? `${this.url}?query=${query}&page=${state.page}&limit=${this.limit}`
+    : `${this.url}?page=${state.page}&limit=${this.limit}`;
+
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -39,17 +37,11 @@ export class PictureService {
     return result.data ? result.data : [];
   }
 
-  async simulateSearching(query: string): Promise<Photo[]> {
-    const response = await fetch(`${this.url}/?query=${query}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const result = await response.json();
-    console.log(result.data)
-    return result.data ? result.data : [];
-  }
-	nextPage() {
-		this.page++;
-    return this.page;
-	}
+// 	nextPage() {
+// 		this.page++;
+//     return this.page;
+// 	}
+//   resetPage() {
+//     this.page = 1;
+//   }
 }

@@ -23,18 +23,21 @@ type Photo = {
   };
 };
 
+type Source = 'load' | 'search'
 export interface PicturesStateModel {
 	pictures: Photo[],
-	source: 'load' | 'search',
+	source: Source,
 	page: number,
 	isLoading: boolean,
+	query: string,
 }
 
 export class LoadMorePictures {
 	static readonly type = '[Pictures] Load More'
 }
-export class SimulateSearching {
-	static readonly type = '[Pictures] Simulate Searching';
+
+export class SearchPictures {
+	static readonly type = '[Pictures] Search'
 	constructor(public query: string) {}
 }
 
@@ -45,6 +48,7 @@ export class SimulateSearching {
 		source: 'load',
 		isLoading: false,
 		page: 1,
+		query: '',
 	}
 })
 
@@ -60,29 +64,31 @@ export class PicturesState {
 		if (state.isLoading) return;
 
 		ctx.patchState({isLoading: true})
-
-		const pictures = await this.pictureService.getPhotos()
+		const pictures = await this.pictureService.getPhotos(state.query)
 
 		ctx.patchState({
 			pictures: [...state.pictures, ...pictures],
 			isLoading: false,
-			source: 'load',
 			page: state.page + 1
 		})
-		this.pictureService.nextPage()
+		// this.pictureService.nextPage()
 	}
-
-  @Action(SimulateSearching)
-	async simulateSearching(ctx: StateContext<PicturesStateModel>, action: SimulateSearching) {
+	@Action(SearchPictures)
+	async search(ctx: StateContext<PicturesStateModel>, action: SearchPictures ) {
 		const state = ctx.getState();
-		ctx.patchState({isLoading: true})
-		const pictures = await this.pictureService.simulateSearching(action.query);
+		if (state.isLoading) return;
+		ctx.patchState({
+			pictures: [],
+			page: 1,
+			query: action.query,
+			source: 'search',
+			isLoading: true,
+		})
+		const pictures = await this.pictureService.getPhotos(action.query)
+
 		ctx.patchState({
 			pictures: pictures,
 			isLoading: false,
-			source: 'search',
-			page: state.page + 1
 		})
-		this.pictureService.nextPage();
 	}
 }

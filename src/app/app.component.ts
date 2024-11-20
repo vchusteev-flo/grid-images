@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { ImageGridComponent } from './components/image-grid/image-grid.component';
 import { PictureService } from './services/app.pictures.service';
 import { Decrement, Increment } from './store/counter.state';
-import { SimulateSearching } from './store/picutre.state';
+import { SearchPictures } from './store/picutre.state';
 
 @Component({
   selector: 'app-root',
@@ -67,7 +67,7 @@ export class AppComponent {
   async search($event: Event) {
     $event.preventDefault();
     if(this.searchControl.value !== null) {
-      this.store.dispatch(new SimulateSearching(this.searchControl.value))
+      this.store.dispatch(new SearchPictures(this.searchControl.value))
     }
   }
 
