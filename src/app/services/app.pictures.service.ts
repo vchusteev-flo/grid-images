@@ -36,12 +36,4 @@ export class PictureService {
     const result = await response.json();
     return result.data ? result.data : [];
   }
-
-// 	nextPage() {
-// 		this.page++;
-//     return this.page;
-// 	}
-//   resetPage() {
-//     this.page = 1;
-//   }
 }

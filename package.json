@@ -23,6 +23,7 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.11",
+    "@aws-amplify/ui-angular": "^5.0.32",
     "@ngxs/devtools-plugin": "18.1.5",
     "@ngxs/logger-plugin": "18.1.5",
     "@ngxs/store": "^18.1.5",

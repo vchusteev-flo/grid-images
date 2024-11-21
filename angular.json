@@ -20,6 +20,7 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
+              "src/polyfills.ts",
               "zone.js" 
             ],
             "tsConfig": "tsconfig.app.json",
@@ -30,6 +31,7 @@
               }
             ],
             "styles": [
+              "node_modules/@aws-amplify/ui-angular/theme.css",
               "@angular/material/prebuilt-themes/cyan-orange.css",
               "src/styles.css"
             ],
@@ -78,6 +80,7 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": [
+              "src/polyfills.ts",
               "zone.js",
               "zone.js/testing"
             ],
@@ -89,6 +92,7 @@
               }
             ],
             "styles": [
+              "node_modules/@aws-amplify/ui-angular/theme.css",
               "@angular/material/prebuilt-themes/cyan-orange.css",
               "src/styles.css"
             ],

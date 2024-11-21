@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, inject } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 import {
   MatDialog,
   MatDialogActions,
@@ -42,8 +43,7 @@ type Photo = {
     MatGridList,
     MatGridTile,
     MatDialogModule,
-    MatDialogActions,
-    DialogComponent,
+    NgOptimizedImage,
   ],
   templateUrl: './image-grid.component.html',
   styleUrl: './image-grid.component.css',
@@ -64,12 +64,6 @@ export class ImageGridComponent {
     this.pictures$ = this.store.select((state: AppState) => state.pictures.pictures)
     this.source$ = this.store.select((state: AppState) => state.pictures.source);
     this.query$ = this.store.select((state: AppState) => state.pictures.query);
-
-    // this.source$.subscribe(source => {
-    //   if (source === 'load') {
-    //     this.updatePictures();
-    //   }
-    // });
   }
 
   ngOnInit() {
