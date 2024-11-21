@@ -1,30 +1,14 @@
 <div>
-  <form class="search-form" [@moveToTop]="isScrolled ? 'finish' : 'begin'">
-    <mat-form-field class="search-bar">
-      <div class='search-container'>
-        <input
-          type="text"
-          matInput
-          (keydown.enter)="search($event)"
-          [formControl]="searchControl"
-          class="search-input"
-          placeholder="Search images"
-          />
-        <button mat-button color="accent" style="margin-right: 8px;" (click)='showLogin($event)'>Login</button>
-      </div>
-      @if (searchControl.hasError('required') && searchControl.touched) {
-      <mat-error class="error-msg">Search text is required</mat-error>
-      }
-    </mat-form-field>
-  </form>
+  <app-search-form (isLoginFormVisible)="showLoginForm($event)"></app-search-form>
   <amplify-authenticator variation="modal" [style]="{'display': isLoginVisible ? 'block' : 'none'}">
     <ng-template
       amplifySlot="authenticated"
       let-user="user"
       let-signOut="signOut"
     >
-      <h1>Welcome {{ user.username }}!</h1>
-      <button (click)="signOut()">Sign Out</button>
+      @if (user.username) {  
+      <app-snack-bar></app-snack-bar>
+      }
     </ng-template>
   </amplify-authenticator>
   <app-image-grid></app-image-grid>

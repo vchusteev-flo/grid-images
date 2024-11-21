@@ -1,0 +1,22 @@
+<form class="search-form" [@moveToTop]="isScrolled ? 'finish' : 'begin'">
+	<mat-form-field class="search-bar">
+		<div class='search-container'>
+			<input
+				type="text"
+				matInput
+				(keydown.enter)="search($event)"
+				[formControl]="searchControl"
+				class="search-input"
+				placeholder="Search images"
+				/>
+			@if(userIsAuthenticated) {
+				<button mat-button color="accent" (click)='signOut()'>Log Out</button>
+			} @else {
+				<button mat-button color="accent" style="margin-right: 8px;" (click)='showLogin($event)'>Login</button>
+			}
+		</div>
+		@if (searchControl.hasError('required') && searchControl.touched) {
+		<mat-error class="error-msg">Search text is required</mat-error>
+		}
+	</mat-form-field>
+</form>

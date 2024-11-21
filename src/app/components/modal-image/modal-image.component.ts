@@ -1,23 +1,21 @@
 import { ChangeDetectionStrategy, Component, inject, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
-  MAT_DIALOG_DATA, MatDialogActions,
-  MatDialogClose,
+  MAT_DIALOG_DATA,
   MatDialogContent,
   MatDialogRef,
-  MatDialogTitle
 } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog',
-  templateUrl: 'dialog.component.html',
-  styleUrl: 'dialog.component.css',
+  templateUrl: 'modal-image.component.html',
+  styleUrl: 'modal-image.component.css',
   standalone: true,
-  imports: [MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
+  imports: [MatButtonModule, MatDialogContent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DialogComponent {
-  readonly dialogRef = inject(MatDialogRef<DialogComponent>);
+export class ModalImageComponent {
+  readonly dialogRef = inject(MatDialogRef<ModalImageComponent>);
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
       imageUrl: string;
