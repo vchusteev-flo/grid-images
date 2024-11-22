@@ -95,6 +95,11 @@
               }
             ],
             "styles": [
+              {
+                "input": "node_modules/@aws-amplify/ui/dist/styles.css",
+                "bundleName": "aws-amplify-ui",
+                "inject": true
+              },
               "node_modules/@aws-amplify/ui-angular/theme.css",
               "@angular/material/prebuilt-themes/cyan-orange.css",
               "src/styles.css"
