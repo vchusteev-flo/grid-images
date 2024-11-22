@@ -23,6 +23,7 @@ Amplify.configure(outputs);
 export class AppComponent {
   isLoginVisible = false;
   isAuthenticated = false;
+  user: { username: string } = { username: '' };
 
   constructor(private authService: AuthService ) {}
 

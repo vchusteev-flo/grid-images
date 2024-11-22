@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, computed, EventEmitter, HostListener, input, Output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatError, MatFormField } from '@angular/material/form-field';
@@ -45,16 +45,10 @@ export class SearchFormComponent {
   @Output() isLoginFormVisible = new EventEmitter();
   searchControl = new FormControl('', [Validators.required]);
   isScrolled = false;
-  userIsAuthenticated: boolean = false;
+  username = input('');
+  userIsAuthenticated = computed(() => this.username() !== '');
 
-  constructor(private store: Store, private authService: AuthService) {
-    this.initializeAuthState();
-  }
-
-  private async initializeAuthState() {
-    const user = await this.authService.getCurrentAuthenticatedUser();
-    this.userIsAuthenticated = !!user;
-  }
+  constructor(private store: Store, private authService: AuthService) {}
 
   async search($event: Event) {
     $event.preventDefault();
@@ -76,7 +70,6 @@ export class SearchFormComponent {
 
   signOut() {
     this.authService.signOut();
-    this.userIsAuthenticated = false;
   }
   @HostListener('window:scroll', ['$event'])
   async onScroll(): Promise<void> {

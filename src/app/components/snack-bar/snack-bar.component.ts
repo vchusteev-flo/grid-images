@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {
+  MAT_SNACK_BAR_DATA,
   MatSnackBar,
   MatSnackBarAction,
   MatSnackBarActions,
@@ -20,6 +21,7 @@ import {
 })
 export class SnackBarComponent {
   private _snackBar = inject(MatSnackBar);
+  @Input() username: string = '';
 
   durationInSeconds = 5;
   ngOnInit() {
@@ -29,6 +31,7 @@ export class SnackBarComponent {
   openSnackBar() {
     this._snackBar.openFromComponent(PizzaPartyAnnotatedComponent, {
       duration: this.durationInSeconds * 1000,
+      data: { username: this.username },
     });
   }
 }
@@ -50,4 +53,6 @@ export class SnackBarComponent {
 })
 export class PizzaPartyAnnotatedComponent {
   snackBarRef = inject(MatSnackBarRef);
+  username: string = inject(MAT_SNACK_BAR_DATA).username;
+
 }

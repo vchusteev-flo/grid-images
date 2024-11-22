@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:image-galery": "node dist/image-galery/server/server.mjs"
+    "serve:ssr:image-galery": "node dist/image-galery/server/server.mjs",
+    "bundle-report": "ng build --configuration production --source-map && source-map-explorer docs/*.js"
   },
   "private": true,
   "dependencies": {

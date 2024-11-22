@@ -9,8 +9,8 @@
 				class="search-input"
 				placeholder="Search images"
 				/>
-			@if(userIsAuthenticated) {
-				<button mat-button color="accent" (click)='signOut()'>Log Out</button>
+			@if(userIsAuthenticated()) {
+				<button mat-button color="accent" (click)='signOut()'>Out</button>
 			} @else {
 				<button mat-button color="accent" style="margin-right: 8px;" (click)='showLogin($event)'>Login</button>
 			}

@@ -1,5 +1,5 @@
 <div>
-  <app-search-form (isLoginFormVisible)="showLoginForm($event)"></app-search-form>
+  <app-search-form [username]="user.username" (isLoginFormVisible)="showLoginForm($event)"></app-search-form>
   <amplify-authenticator variation="modal" [style]="{'display': isLoginVisible ? 'block' : 'none'}">
     <ng-template
       amplifySlot="authenticated"
@@ -7,7 +7,7 @@
       let-signOut="signOut"
     >
       @if (user.username) {  
-      <app-snack-bar></app-snack-bar>
+      <app-snack-bar [username]='user.username'></app-snack-bar>
       }
     </ng-template>
   </amplify-authenticator>
